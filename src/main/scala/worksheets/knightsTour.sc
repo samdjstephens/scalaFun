@@ -20,14 +20,19 @@ def jump(p: Point): Seq[Point] = for {
 
 jump(Point(0,0)) foreach println
 
-def routesToEnd(routes: Stream[List[Point]]): Stream[List[Point]] = {
-  val newRoutes = for {
-    route <- routes
-    nextPos <- jump(route.head)
-    if !(route contains nextPos)
-  } yield nextPos :: route
-  if (newRoutes.isEmpty) routes
-  else routesToEnd(newRoutes)
+def routeToEnd(currentRoute: List[Point]): List[Point] = {
+  if (currentRoute.length == 10) currentRoute
+  else {
+    val otherRoutes = for {
+      nextPos <- jump(currentRoute.head)
+      if !(currentRoute contains nextPos)
+      newRoute = nextPos :: currentRoute
+      expandedRoute <- routeToEnd(newRoute)
+      
+    } yield routeToEnd(expandedRoute)
+    if (otherRoutes.isEmpty) Nil
+
+  }
 }
 
-val firstRoutes = routesToEnd(Stream(List(Point(0, 0)))).take(10).map(_.length).toList
+val firstRoutes = routesToEnd(Stream(List(Point(0, 0)))).take(10)
