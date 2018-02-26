@@ -49,3 +49,9 @@ def length[T](list: List[T]): Int = {
 length(myList)
 length(emptyList)
 length(singleElList)
+
+
+for {
+  x <- 1 to 10
+  y <- 2 to 10
+} yield List(x) :: List(y)
