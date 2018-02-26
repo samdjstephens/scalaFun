@@ -26,7 +26,8 @@ def routesToEnd(routes: Stream[List[Point]]): Stream[List[Point]] = {
     nextPos <- jump(route.head)
     if !(route contains nextPos)
   } yield nextPos :: route
-  routes #::: routesToEnd(newRoutes)
+  if (newRoutes.isEmpty) routes
+  else routesToEnd(newRoutes)
 }
 
-val firstRoutes = routesToEnd(Stream(List(Point(0, 0)))).dropWhile(_.length < 4).head
+val firstRoutes = routesToEnd(Stream(List(Point(0, 0)))).take(10).map(_.length).toList
